@@ -12,7 +12,15 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
+    - name: Update yarn
+      run: yarn set version berry
+    - name: Yarn version
+      run: yarn --version
+    - name: Generate simple .yarnrc.yml
+      run: |
+        echo "nodeLinker: node-modules" >> .yarnrc.yml
+    - name: Clean global cache
+      run: yarn cache clean --all
     - uses: akv-platform/setup-node@add-caching-for-node-dependencies
       with:
         node-version: ${{ matrix.version }}
