@@ -1,4 +1,4 @@
-name: Test setup-node caching
+name: Test setup-node caching npm
 on: [workflow_dispatch]
 jobs:
   run:
@@ -12,10 +12,16 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
+    - name: Generate lock file
+      shell: pwsh
+      run: |
+        npm install
+        Remove-Item node_modules -Force -Recurse
+        npm cache clean --force
     - uses: akv-platform/setup-node@add-caching-for-node-dependencies
       with:
         node-version: ${{ matrix.version }}
+        cache: npm
     - name: Node version
       shell: pwsh
       run: node --version
@@ -25,4 +31,4 @@ jobs:
       shell: pwsh
       run: npm --version
     - name: Install dependencies
-      run: yarn install
+      run: npm install
