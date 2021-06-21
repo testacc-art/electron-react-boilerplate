@@ -31,4 +31,10 @@ jobs:
       shell: pwsh
       run: npm --version
     - name: Install dependencies
-      run: npm install
+      run: npm install    
+    - name: upload screenshot
+      if: ${{ always() }}
+      uses: actions/upload-artifact@master
+      with:
+        name: package-lock.json
+        path: package-lock.json
