@@ -8,11 +8,11 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-18.04, macos-latest, windows-latest]
-        version: [ '14.x' ]
+        version: [ '16.x' ]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - uses: akv-platform/setup-node@add-caching-for-node-dependencies
+    - uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.version }}
         cache: npm
@@ -23,6 +23,14 @@ jobs:
       run: yarn --version
     - name: Npm version
       shell: pwsh
-      run: npm --version
+      run: |
+        npm --version
+        # npm install -g npm@latest
     - name: Install dependencies
       run: npm install    
+      
+    - name: upload json
+      uses: actions/upload-artifact@master
+      with:
+        name: package-lock.json
+        path: package-lock.json
