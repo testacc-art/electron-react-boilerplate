@@ -19,6 +19,7 @@ jobs:
         id: setup
         with:
           node-version: 15
+          cache: yarn
 
       - name: yarn install
         if: steps.setup.outputs.cache-hit != 'true'
