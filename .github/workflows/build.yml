@@ -7,22 +7,23 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-18.04, macos-latest, windows-latest]
-        version: [ '12.x', '14.x' ]
+        operating-system: [macos-11]
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - uses: akv-platform/setup-node@add-caching-for-node-dependencies
       with:
-        node-version: ${{ matrix.version }}
-    - name: Node version
-      shell: pwsh
-      run: node --version
-    - name: Yarn version
-      run: yarn --version
-    - name: Npm version
-      shell: pwsh
-      run: npm --version
+        fetch-depth: 0
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+    - uses: actions/cache@v2
+      name: Yarn cache
+      timeout-minutes: 2
+      with:
+        path: '**/node_modules'
+        key: macos11-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          macos11-yarn-
     - name: Install dependencies
+      timeout-minutes: 4
       run: yarn install
